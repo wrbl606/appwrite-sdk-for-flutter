@@ -7,8 +7,7 @@ class RTSub {
   RTSub({required this.stream, required this.close});
 }
 
-class Realtime {
-  static Realtime? _instance;
+class Realtime extends Service {
   late WebSocketChannel websok;
   Map<String, String>? headers = {};
 
@@ -18,16 +17,9 @@ class Realtime {
   late Map<String, List<StreamController>> channels;
   Map<String, dynamic>? lastMessage;
 
-  Realtime._internal() {
-    channels = Map<String, List<StreamController>>.from({});
-  }
+  Realtime(Client client) : super(client);
 
-  static Realtime get instance {
-    if (_instance == null) {
-      _instance = Realtime._internal();
-    }
-    return _instance!;
-  }
+
 
   _closeConnection() {
     websok.sink.close.call();

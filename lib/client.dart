@@ -2,13 +2,13 @@ part of appwrite;
 
 class Client {
   String endPoint;
+  String? endPointRealtime;
   String type = 'unknown';
   Map<String, String>? headers;
   late Map<String, String> config;
   bool selfSigned;
   bool initialized = false;
   Dio http;
-  Realtime _realtime = Realtime.instance;
   late PersistCookieJar cookieJar;
   late SharedPreferences _prefs;
 
@@ -77,15 +77,15 @@ class Client {
 
   Client setEndpoint(String endPoint) {
     this.endPoint = endPoint;
-    _realtime.endPoint = endPoint
+    endPointRealtime = endPoint
         .replaceFirst('https://', 'wss://')
         .replaceFirst('http://', 'ws://');
     this.http.options.baseUrl = this.endPoint;
     return this;
   }
 
-  Client setEndPointRealtime(String endPointRealtime) {
-    _realtime.endPoint = endPointRealtime;
+  Client setEndPointRealtime(String endPoint) {
+    endPointRealtime = endPoint;
     return this;
   }
 
