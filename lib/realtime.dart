@@ -10,6 +10,7 @@ class RTSub {
 class Realtime {
   static Realtime? _instance;
   late WebSocketChannel websok;
+  Map<String, String>? headers = {};
 
   String? endPoint;
   String? project;
@@ -53,7 +54,7 @@ class Realtime {
     }
     lastUrl = uri.toString();
     print('subscription: $lastUrl');
-    websok = WebSocketChannel.connect(uri);
+    websok = WebSocketChannel.connect(uri, headers: headers);
     websok.stream.listen((event) {
       final data = jsonDecode(event);
       lastMessage = data;
