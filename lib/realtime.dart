@@ -1,38 +1,37 @@
 part of appwrite;
 
-class RTSub {
+class RealtimeSubscription {
   final Stream stream;
   final Function close;
 
-  RTSub({required this.stream, required this.close});
+  RealtimeSubscription({required this.stream, required this.close});
 }
 
 class Realtime extends Service {
-  late WebSocketChannel websok;
-  Map<String, String>? headers = {};
+  late WebSocketChannel _websok;
 
-  String? endPoint;
-  String? project;
-  String? lastUrl;
+  String? _lastUrl;
   late Map<String, List<StreamController>> channels;
   Map<String, dynamic>? lastMessage;
 
-  Realtime(Client client) : super(client);
-
-
-
-  _closeConnection() {
-    websok.sink.close.call();
+  Realtime(Client client) : super(client) {
+    channels = {};
   }
 
-  createSocket() {
+  _closeConnection() {
+    _websok.sink.close.call();
+  }
+
+  createSocket() async {
     //close existing connection
+    final endPoint = client.endPointRealtime;
+    final project = client.headers!['X-Appwrite-Project'];
     if (endPoint == null) return;
     if (channels.keys.length < 1) {
       _closeConnection();
       return;
     }
-    var uri = Uri.parse(endPoint!);
+    var uri = Uri.parse(endPoint);
     uri = Uri(
         host: uri.host,
         scheme: uri.scheme,
@@ -41,13 +40,15 @@ class Realtime extends Service {
           "channels[]": channels.keys,
         },
         path: uri.path + "/realtime");
-    if (lastUrl == uri.toString() && websok.closeCode == null) {
+    if (_lastUrl == uri.toString() && _websok.closeCode == null) {
       return;
     }
-    lastUrl = uri.toString();
-    print('subscription: $lastUrl');
-    websok = WebSocketChannel.connect(uri, headers: headers);
-    websok.stream.listen((event) {
+    _lastUrl = uri.toString();
+    print('subscription: $_lastUrl');
+    final cookies = await client.cookieJar.loadForRequest(uri);
+    _websok = WebSocketChannel.connect(uri,
+        headers: {HttpHeaders.cookieHeader: CookieManager.getCookies(cookies)});
+    _websok.stream.listen((event) {
       print(event);
       final data = jsonDecode(event);
       lastMessage = data;
@@ -62,5 +63,29 @@ class Realtime extends Service {
         });
       }
     });
+  }
+
+  RealtimeSubscription subscribe(List<String> channels) {
+    StreamController controller = StreamController();
+    channels.forEach((channel) {
+      if (!this.channels.containsKey(channel)) {
+        this.channels[channel] = [];
+      }
+      this.channels[channel]!.add(controller);
+    });
+    Future.delayed(Duration.zero, () => this.createSocket());
+    RealtimeSubscription subscription = RealtimeSubscription(
+        stream: controller.stream,
+        close: () {
+          controller.close();
+          channels.forEach((channel) {
+            this.channels[channel]!.remove(controller);
+            if (this.channels[channel]!.length < 1) {
+              this.channels.remove(channel);
+            }
+          });
+          Future.delayed(Duration.zero, () => this.createSocket());
+        });
+    return subscription;
   }
 }

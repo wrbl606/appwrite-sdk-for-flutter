@@ -9,6 +9,7 @@ class Client {
   bool selfSigned;
   bool initialized = false;
   Dio http;
+  String? cookie;
   late PersistCookieJar cookieJar;
   late SharedPreferences _prefs;
 
@@ -54,7 +55,6 @@ class Client {
   Client setProject(value) {
     config['project'] = value;
     addHeader('X-Appwrite-Project', value);
-    _realtime.project = value;
     return this;
   }
 
@@ -90,30 +90,6 @@ class Client {
     return this;
   }
 
-  RTSub subscribe(List<String> channels) {
-    StreamController controller = StreamController();
-    channels.forEach((channel) {
-      if (!_realtime.channels.containsKey(channel)) {
-        _realtime.channels[channel] = [];
-      }
-      _realtime.channels[channel]!.add(controller);
-    });
-    Future.delayed(Duration.zero, () => _realtime.createSocket());
-    RTSub subscription = RTSub(
-        stream: controller.stream,
-        close: () {
-          controller.close();
-          channels.forEach((channel) {
-            _realtime.channels[channel]!.remove(controller);
-            if (_realtime.channels[channel]!.length < 1) {
-              _realtime.channels.remove(channel);
-            }
-          });
-          Future.delayed(Duration.zero, () => _realtime.createSocket());
-        });
-    return subscription;
-  }
-
   Client addHeader(String key, String value) {
     headers![key] = value;
 
@@ -126,16 +102,8 @@ class Client {
       final Directory cookieDir = await _getCookiePath();
       cookieJar = new PersistCookieJar(storage: FileStorage(cookieDir.path));
       this.http.interceptors.add(CookieManager(cookieJar));
-      cookieJar.loadForRequest(Uri.parse(endPoint)).then((cookies) {
-        var cookie = CookieManager.getCookies(cookies);
-        if (cookie.isNotEmpty) {
-          _realtime.headers![HttpHeaders.cookieHeader] = cookie;
-        }
-      });
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
       addHeader('Origin', 'appwrite-$type://${packageInfo.packageName}');
-      _realtime.headers?['origin'] =
-          'appwrite-$type://${packageInfo.packageName}';
       //creating custom user agent
       DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
       var device = '';
@@ -163,8 +131,6 @@ class Client {
       }
       addHeader('user-agent',
           '${packageInfo.appName}/${packageInfo.version} $device');
-      _realtime.headers?['user-agent'] =
-          '${packageInfo.appName}/${packageInfo.version} $device';
     } else {
       // if web set withCredentials true to make cookies work
       _prefs = await SharedPreferences.getInstance();
