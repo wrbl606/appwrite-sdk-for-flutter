@@ -45,9 +45,13 @@ class Realtime extends Service {
     }
     _lastUrl = uri.toString();
     print('subscription: $_lastUrl');
-    final cookies = await client.cookieJar.loadForRequest(uri);
-    _websok = WebSocketChannel.connect(uri,
-        headers: {HttpHeaders.cookieHeader: CookieManager.getCookies(cookies)});
+    Map<String, String>? headers;
+    if (!kIsWeb) {
+      final cookies = await client.cookieJar.loadForRequest(uri);
+      headers = {HttpHeaders.cookieHeader: CookieManager.getCookies(cookies)};
+    }
+
+    _websok = WebSocketChannel.connect(uri, headers: headers);
     _websok.stream.listen((event) {
       print(event);
       final data = jsonDecode(event);
