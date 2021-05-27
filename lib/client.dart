@@ -54,6 +54,7 @@ class Client {
   Client setProject(value) {
     config['project'] = value;
     addHeader('X-Appwrite-Project', value);
+    _realtime.project = value;
     return this;
   }
 
@@ -128,12 +129,13 @@ class Client {
       cookieJar.loadForRequest(Uri.parse(endPoint)).then((cookies) {
         var cookie = CookieManager.getCookies(cookies);
         if (cookie.isNotEmpty) {
-          _realtime.headers![HttpHeaders.setCookieHeader] = cookie;
+          _realtime.headers![HttpHeaders.cookieHeader] = cookie;
         }
       });
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
       addHeader('Origin', 'appwrite-$type://${packageInfo.packageName}');
-
+      _realtime.headers?['origin'] =
+          'appwrite-$type://${packageInfo.packageName}';
       //creating custom user agent
       DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
       var device = '';
@@ -161,13 +163,14 @@ class Client {
       }
       addHeader('user-agent',
           '${packageInfo.appName}/${packageInfo.version} $device');
+      _realtime.headers?['user-agent'] =
+          '${packageInfo.appName}/${packageInfo.version} $device';
     } else {
       // if web set withCredentials true to make cookies work
       _prefs = await SharedPreferences.getInstance();
       addHeader('X-Fallback-Cookies', _prefs.getString('cookieFallback') ?? '');
       this.http.options.extra['withCredentials'] = true;
     }
-
     this.http.options.baseUrl = this.endPoint;
     this.http.options.validateStatus = (status) => status! < 400;
     initialized = true;
