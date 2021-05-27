@@ -48,6 +48,7 @@ class Realtime extends Service {
     print('subscription: $lastUrl');
     websok = WebSocketChannel.connect(uri, headers: headers);
     websok.stream.listen((event) {
+      print(event);
       final data = jsonDecode(event);
       lastMessage = data;
       if (data['channels'] != null) {
