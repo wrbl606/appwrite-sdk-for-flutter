@@ -25,9 +25,7 @@ dependencies:
 
 dependency_overrides:
   web_socket_channel:
-    git:
-      url: https://github.com/lohanidamodar/web_socket_channel
-      ref: feat-headers
+    path: web_socket_channel
 
 dev_dependencies:
   flutter_test:
