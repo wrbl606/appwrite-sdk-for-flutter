@@ -437,9 +437,11 @@ packages:
   web_socket_channel:
     dependency: "direct main"
     description:
-      path: web_socket_channel
-      relative: true
-    source: path
+      path: "."
+      ref: feat-headers
+      resolved-ref: "8ffcb0c7821d008287e5d4b57b0835b2e64c39c6"
+      url: "https://github.com/lohanidamodar/web_socket_channel"
+    source: git
     version: "2.1.0"
   win32:
     dependency: transitive
