@@ -21,9 +21,6 @@ dependencies:
   path_provider: ^2.0.1
   shared_preferences: ^2.0.5
   universal_html: ^2.0.8
-  web_socket_channel: ^2.1.0
-
-dependency_overrides:
   web_socket_channel:
     path: web_socket_channel
 
