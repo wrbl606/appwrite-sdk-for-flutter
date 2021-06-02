@@ -8,7 +8,7 @@ class RealtimeSubscription {
 }
 
 class Realtime extends Service {
-  late WebSocketChannel _websok;
+  WebSocketChannel? _websok;
 
   String? _lastUrl;
   late Map<String, List<StreamController>> channels;
@@ -19,7 +19,7 @@ class Realtime extends Service {
   }
 
   _closeConnection() {
-    _websok.sink.close(goingAway);
+    _websok?.sink.close(goingAway);
   }
 
   createSocket() async {
@@ -37,7 +37,7 @@ class Realtime extends Service {
           "channels[]": channels.keys,
         },
         path: uri.path + "/realtime");
-    if (_lastUrl == uri.toString() && _websok.closeCode == null) {
+    if (_lastUrl == uri.toString() && _websok?.closeCode == null) {
       return;
     }
     _lastUrl = uri.toString();
@@ -48,8 +48,7 @@ class Realtime extends Service {
       headers = {HttpHeaders.cookieHeader: CookieManager.getCookies(cookies)};
     }
     _websok = WebSocketChannel.connect(uri, headers: headers);
-    _websok.stream.listen((event) {
-      print(event);
+    _websok?.stream.listen((event) {
       final data = jsonDecode(event);
       lastMessage = data;
       if (data['channels'] != null) {
