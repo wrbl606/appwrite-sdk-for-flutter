@@ -19,7 +19,7 @@ class Realtime extends Service {
   }
 
   _closeConnection() {
-    _websok.sink.close.call();
+    _websok.sink.close(goingAway);
   }
 
   createSocket() async {
