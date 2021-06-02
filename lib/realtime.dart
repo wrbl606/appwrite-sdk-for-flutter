@@ -27,7 +27,6 @@ class Realtime extends Service {
     final endPoint = client.endPointRealtime;
     final project = client.headers!['X-Appwrite-Project'];
     if (endPoint == null) return;
-    _closeConnection();
     var uri = Uri.parse(endPoint);
     uri = Uri(
         host: uri.host,
@@ -40,6 +39,7 @@ class Realtime extends Service {
     if (_lastUrl == uri.toString() && _websok?.closeCode == null) {
       return;
     }
+    _closeConnection();
     _lastUrl = uri.toString();
     print('subscription: $_lastUrl');
     Map<String, String>? headers;
