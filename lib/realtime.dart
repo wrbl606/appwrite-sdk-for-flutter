@@ -27,10 +27,7 @@ class Realtime extends Service {
     final endPoint = client.endPointRealtime;
     final project = client.headers!['X-Appwrite-Project'];
     if (endPoint == null) return;
-    if (channels.keys.length < 1) {
-      _closeConnection();
-      return;
-    }
+    _closeConnection();
     var uri = Uri.parse(endPoint);
     uri = Uri(
         host: uri.host,
@@ -50,7 +47,6 @@ class Realtime extends Service {
       final cookies = await client.cookieJar.loadForRequest(uri);
       headers = {HttpHeaders.cookieHeader: CookieManager.getCookies(cookies)};
     }
-
     _websok = WebSocketChannel.connect(uri, headers: headers);
     _websok.stream.listen((event) {
       print(event);
