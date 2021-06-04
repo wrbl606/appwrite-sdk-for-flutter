@@ -23,7 +23,7 @@ class DocumentListModel {
         };
     }
 
-    List<T> convertTo<T>(T Function(Map) fromJson) =>
+    List<T> convertTo<T>(T Function(Map<String, dynamic>) fromJson) =>
       documents.map((d) => d.convertTo<T>(fromJson)).toList();
 }
 

@@ -31,6 +31,6 @@ class DocumentModel {
         };
     }
 
-    T convertTo<T>(T Function(Map) fromJson) => fromJson(data);
+    T convertTo<T>(T Function(Map<String, dynamic>) fromJson) => fromJson(data);
 }
 
