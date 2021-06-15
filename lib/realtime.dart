@@ -43,8 +43,8 @@ class Realtime extends Service {
     _lastUrl = uri.toString();
     print('subscription: $_lastUrl');
     Map<String, String>? headers;
+    if (!client.initialized) await client.init();
     if (!kIsWeb) {
-      if (!client.initialized) await client.init();
       final cookies = await client.cookieJar.loadForRequest(uri);
       headers = {HttpHeaders.cookieHeader: CookieManager.getCookies(cookies)};
     }
