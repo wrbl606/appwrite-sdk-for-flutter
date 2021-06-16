@@ -31,6 +31,7 @@ class Realtime extends Service {
     uri = Uri(
         host: uri.host,
         scheme: uri.scheme,
+        port: uri.port,
         queryParameters: {
           "project": project,
           "channels[]": channels.keys,
