@@ -9,7 +9,6 @@ class Client {
   bool selfSigned;
   bool initialized = false;
   Dio http;
-  String? cookie;
   late PersistCookieJar cookieJar;
   late SharedPreferences _prefs;
 
