@@ -18,9 +18,9 @@ Create a new user and session:
 ```dart
 Account account = Account(client);
 
-Response user = await account.create(email: 'me@appwrite.io', password: 'password', name: 'My Name');
+UserModel user = await account.create(email: 'me@appwrite.io', password: 'password', name: 'My Name');
  
-Response session = await account.createSession(email: 'me@appwrite.io', password: 'password');
+SessionModel session = await account.createSession(email: 'me@appwrite.io', password: 'password');
 
 ```
 
@@ -29,7 +29,7 @@ Fetch user profile:
 ```dart
 Account account = Account(client);
 
-Response profile = await account.get();
+UserModel profile = await account.get();
 ```
 
 Upload File:
@@ -37,15 +37,15 @@ Upload File:
 ```dart
 Storage storage = Storage(client);
 
-MultipartFile file = MultipartFile.fromFile('./path-to-file/image.jpg', filename: 'image.jpg');
+FileInput file = FileInput.fromFile('./path-to-file/image.jpg', filename: 'image.jpg');
 
 storage.createFile(
     file: file,
     read: ['*'],
     write: []
 )
-.then((response) {
-    print(response); // File uploaded!
+.then((file) {
+    print(file.toMap()); // File uploaded!
 })
 .catchError((error) {
     print(error.response);

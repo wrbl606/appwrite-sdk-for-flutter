@@ -1,8 +1,9 @@
 # Appwrite Flutter SDK
 
-[![pub package](https://img.shields.io/pub/v/appwrite?style=flat-square.svg)](https://pub.dartlang.org/packages/appwrite)
+[![pub package](https://img.shields.io/pub/v/appwrite?style=flat-square)](https://pub.dartlang.org/packages/appwrite)
 ![License](https://img.shields.io/github/license/appwrite/sdk-for-flutter.svg?style=flat-square)
 ![Version](https://img.shields.io/badge/api%20version-0.8.0-blue.svg?style=flat-square)
+[![Build Status](https://img.shields.io/travis/com/appwrite/sdk-generator?style=flat-square)](https://travis-ci.com/appwrite/sdk-generator)
 [![Twitter Account](https://img.shields.io/twitter/follow/appwrite_io?color=00acee&label=twitter&style=flat-square)](https://twitter.com/appwrite_io)
 [![Discord](https://img.shields.io/discord/564160730845151244?label=discord&style=flat-square)](https://appwrite.io/discord)
 
@@ -22,13 +23,15 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yml
 dependencies:
-  appwrite: ^0.6.4
+  appwrite:
+    git: https://github.com/appwrite/sdk-for-flutter
+    ref: feat-response-model
 ```
 
 You can install packages from the command line:
 
 ```bash
-pub get appwrite
+flutter pub add appwrite
 ```
 
 

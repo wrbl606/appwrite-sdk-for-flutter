@@ -10,14 +10,14 @@ class Storage extends Service {
      /// your results. On admin mode, this endpoint will return a list of all of the
      /// project's files. [Learn more about different API modes](/docs/admin).
      ///
-     Future<FileListModel> listFiles({String? search, int? limit, int? offset, OrderType? orderType}) async {
+     Future<FileListModel> listFiles({String? search, int? limit, int? offset, String? orderType}) async {
         final String path = '/storage/files';
 
         final Map<String, dynamic> params = {
             'search': search,
             'limit': limit,
             'offset': offset,
-            'orderType': orderType?.name(),
+            'orderType': orderType,
         };
 
         final Map<String, String> headers = {

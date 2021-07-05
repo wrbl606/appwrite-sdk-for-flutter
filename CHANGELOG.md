@@ -1,3 +1,8 @@
+## 0.6.5
+- Removed default values of params
+- **Breaking** Response models for endpoints
+- **Breaking** Removed the OrderType enum
+
 ## 0.6.3
 
 - Removed default values, nothing should change in usage as default values are already allocated in server

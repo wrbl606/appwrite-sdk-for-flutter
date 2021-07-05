@@ -377,8 +377,7 @@ class Account extends Service {
             for (var item in value) {
               query.add(Uri.encodeComponent(key + '[]') + '=' + Uri.encodeComponent(item));
             }
-          }
-          else {
+          } else if(value != null) {
               query.add(Uri.encodeComponent(key) + '=' + Uri.encodeComponent(value));
           }
         });
