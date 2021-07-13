@@ -30,7 +30,7 @@ class Account extends Service {
      /// login to their new account, you need to create a new [account
      /// session](/docs/client/account#accountCreateSession).
      ///
-    Future<Response> create({required String email, required String password, String name = ''}) {
+    Future<Response> create({required String email, required String password, String? name}) {
         final String path = '/account';
 
         final Map<String, dynamic> params = {
@@ -96,7 +96,8 @@ class Account extends Service {
      /// Use this endpoint to create a JSON Web Token. You can use the resulting JWT
      /// to authenticate on behalf of the current user when working with the
      /// Appwrite server-side API and SDKs. The JWT secret is valid for 15 minutes
-     /// from its creation and will be invalid if the user will logout.
+     /// from its creation and will be invalid if the user will logout in that time
+     /// frame.
      ///
     Future<Response> createJWT() {
         final String path = '/account/jwt';
@@ -153,7 +154,7 @@ class Account extends Service {
      /// to pass in the new password, and the old password. For users created with
      /// OAuth and Team Invites, oldPassword is optional.
      ///
-    Future<Response> updatePassword({required String password, String oldPassword = ''}) {
+    Future<Response> updatePassword({required String password, String? oldPassword}) {
         final String path = '/account/password';
 
         final Map<String, dynamic> params = {
@@ -319,9 +320,10 @@ class Account extends Service {
      ///
      /// Use this endpoint to allow a new user to register an anonymous account in
      /// your project. This route will also create a new session for the user. To
-     /// allow the new user to convert an anonymous account to a normal account
-     /// account, you need to update its [email and
-     /// password](/docs/client/account#accountUpdateEmail).
+     /// allow the new user to convert an anonymous account to a normal account, you
+     /// need to update its [email and
+     /// password](/docs/client/account#accountUpdateEmail) or create an [OAuth2
+     /// session](/docs/client/account#accountCreateOAuth2Session).
      ///
     Future<Response> createAnonymousSession() {
         final String path = '/account/sessions/anonymous';
@@ -343,7 +345,7 @@ class Account extends Service {
      /// first. Use the success and failure arguments to provide a redirect URL's
      /// back to your app when login is completed.
      ///
-    Future createOAuth2Session({required String provider, String success = 'https://appwrite.io/auth/oauth2/success', String failure = 'https://appwrite.io/auth/oauth2/failure', List scopes = const []}) {
+    Future createOAuth2Session({required String provider, String? success, String? failure, List? scopes}) {
         final String path = '/account/sessions/oauth2/{provider}'.replaceAll(RegExp('{provider}'), provider);
 
         final Map<String, dynamic> params = {
@@ -361,8 +363,7 @@ class Account extends Service {
             for (var item in value) {
               query.add(Uri.encodeComponent(key + '[]') + '=' + Uri.encodeComponent(item));
             }
-          }
-          else {
+          } else if(value != null) {
               query.add(Uri.encodeComponent(key) + '=' + Uri.encodeComponent(value));
           }
         });
@@ -395,6 +396,24 @@ class Account extends Service {
             });
         }
 
+    }
+
+     /// Get Session By ID
+     ///
+     /// Use this endpoint to get a logged in user's session using a Session ID.
+     /// Inputting 'current' will return the current session being used.
+     ///
+    Future<Response> getSession({required String sessionId}) {
+        final String path = '/account/sessions/{sessionId}'.replaceAll(RegExp('{sessionId}'), sessionId);
+
+        final Map<String, dynamic> params = {
+        };
+
+        final Map<String, String> headers = {
+            'content-type': 'application/json',
+        };
+
+        return client.call(HttpMethod.get, path: path, params: params, headers: headers);
     }
 
      /// Delete Account Session

@@ -103,6 +103,7 @@ class Client {
       this.http.interceptors.add(CookieManager(cookieJar));
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
       addHeader('Origin', 'appwrite-$type://${packageInfo.packageName}');
+
       //creating custom user agent
       DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
       var device = '';
@@ -129,13 +130,14 @@ class Client {
         device = '(Macintosh; ${macinfo.model})';
       }
       addHeader('user-agent',
-          '${packageInfo.appName}/${packageInfo.version} $device');
+          '${packageInfo.packageName}/${packageInfo.version} $device');
     } else {
       // if web set withCredentials true to make cookies work
       _prefs = await SharedPreferences.getInstance();
       addHeader('X-Fallback-Cookies', _prefs.getString('cookieFallback') ?? '');
       this.http.options.extra['withCredentials'] = true;
     }
+
     this.http.options.baseUrl = this.endPoint;
     this.http.options.validateStatus = (status) => status! < 400;
     initialized = true;
@@ -158,6 +160,10 @@ class Client {
 
     if (!initialized) {
       await this.init();
+    }
+
+    if (params.isNotEmpty) {
+      params.removeWhere((key, value) => value == null);
     }
 
     // Origin is hardcoded for testing
