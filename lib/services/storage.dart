@@ -138,12 +138,13 @@ class Storage extends Service {
      /// and spreadsheets, will return the file icon image. You can also pass query
      /// string arguments for cutting and resizing your preview image.
      ///
-     Future<Uint8List>  getFilePreview({required String fileId, int? width, int? height, int? quality, int? borderWidth, String? borderColor, int? borderRadius, double? opacity, int? rotation, String? background, String? output}) async {
+     Future<Uint8List>  getFilePreview({required String fileId, int? width, int? height, String? gravity, int? quality, int? borderWidth, String? borderColor, int? borderRadius, double? opacity, int? rotation, String? background, String? output}) async {
         final String path = '/storage/files/{fileId}/preview'.replaceAll(RegExp('{fileId}'), fileId);
 
         final Map<String, dynamic> params = {
             'width': width,
             'height': height,
+            'gravity': gravity,
             'quality': quality,
             'borderWidth': borderWidth,
             'borderColor': borderColor,

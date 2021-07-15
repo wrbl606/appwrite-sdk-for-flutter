@@ -1,7 +1,11 @@
-## 0.6.5
-- Removed default values of params
-- **Breaking** Response models for endpoints
-- **Breaking** Removed the OrderType enum
+## 0.7.0
+- Support for Appwrite 0.9
+- Breaking - removed order type enum, now you should pass string &#039;ASC&#039; or &#039;DESC&#039;
+- Image Crop Gravity support in image preview service
+- New endpoint in Account getSession to get session by ID
+- Fix - issues with User-Agent when app name consisted of non-ASCII characters
+- Fix - issue with null Success and Failure URL in createOAuth2Session
+- Updated underlying dependencies
 
 ## 0.6.3
 
