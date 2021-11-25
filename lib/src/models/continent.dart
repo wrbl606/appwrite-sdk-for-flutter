@@ -1,7 +1,7 @@
 part of appwrite.models;
 
 /// Continent
-class Continent {
+class Continent implements Model {
     /// Continent name.
     final String name;
     /// Continent two letter code.
@@ -14,11 +14,12 @@ class Continent {
 
     factory Continent.fromMap(Map<String, dynamic> map) {
         return Continent(
-            name: map['name'],
-            code: map['code'],
+            name: map['name'].toString(),
+            code: map['code'].toString(),
         );
     }
 
+    @override
     Map<String, dynamic> toMap() {
         return {
             "name": name,

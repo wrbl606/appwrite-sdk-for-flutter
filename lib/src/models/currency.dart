@@ -1,7 +1,7 @@
 part of appwrite.models;
 
 /// Currency
-class Currency {
+class Currency implements Model {
     /// Currency symbol.
     final String symbol;
     /// Currency name.
@@ -29,16 +29,17 @@ class Currency {
 
     factory Currency.fromMap(Map<String, dynamic> map) {
         return Currency(
-            symbol: map['symbol'],
-            name: map['name'],
-            symbolNative: map['symbolNative'],
+            symbol: map['symbol'].toString(),
+            name: map['name'].toString(),
+            symbolNative: map['symbolNative'].toString(),
             decimalDigits: map['decimalDigits'],
             rounding: map['rounding'].toDouble(),
-            code: map['code'],
-            namePlural: map['namePlural'],
+            code: map['code'].toString(),
+            namePlural: map['namePlural'].toString(),
         );
     }
 
+    @override
     Map<String, dynamic> toMap() {
         return {
             "symbol": symbol,

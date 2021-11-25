@@ -1,7 +1,7 @@
 part of appwrite.models;
 
 /// Locale
-class Locale {
+class Locale implements Model {
     /// User IP address.
     final String ip;
     /// Country code in [ISO 3166-1](http://en.wikipedia.org/wiki/ISO_3166-1) two-character format
@@ -29,16 +29,17 @@ class Locale {
 
     factory Locale.fromMap(Map<String, dynamic> map) {
         return Locale(
-            ip: map['ip'],
-            countryCode: map['countryCode'],
-            country: map['country'],
-            continentCode: map['continentCode'],
-            continent: map['continent'],
+            ip: map['ip'].toString(),
+            countryCode: map['countryCode'].toString(),
+            country: map['country'].toString(),
+            continentCode: map['continentCode'].toString(),
+            continent: map['continent'].toString(),
             eu: map['eu'],
-            currency: map['currency'],
+            currency: map['currency'].toString(),
         );
     }
 
+    @override
     Map<String, dynamic> toMap() {
         return {
             "ip": ip,

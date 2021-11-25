@@ -30,10 +30,11 @@ class Account extends Service {
      /// login to their new account, you need to create a new [account
      /// session](/docs/client/account#accountCreateSession).
      ///
-     Future<models.User> create({required String email, required String password, String? name}) async {
+     Future<models.User> create({required String userId, required String email, required String password, String? name}) async {
         final String path = '/account';
 
         final Map<String, dynamic> params = {
+            'userId': userId,
             'email': email,
             'password': password,
             'name': name,
@@ -121,10 +122,12 @@ class Account extends Service {
      /// Get currently logged in user list of latest security activity logs. Each
      /// log returns user IP address, location and date and time of log.
      ///
-     Future<models.LogList> getLogs() async {
+     Future<models.LogList> getLogs({int? limit, int? offset}) async {
         final String path = '/account/logs';
 
         final Map<String, dynamic> params = {
+            'limit': limit,
+            'offset': offset,
         };
 
         final Map<String, String> headers = {
@@ -366,10 +369,11 @@ class Account extends Service {
      /// the URL parameter empty, so that the login completion will be handled by
      /// your Appwrite instance by default.
      ///
-     Future<models.Token> createMagicURLSession({required String email, String? url}) async {
+     Future<models.Token> createMagicURLSession({required String userId, required String email, String? url}) async {
         final String path = '/account/sessions/magic-url';
 
         final Map<String, dynamic> params = {
+            'userId': userId,
             'email': email,
             'url': url,
         };

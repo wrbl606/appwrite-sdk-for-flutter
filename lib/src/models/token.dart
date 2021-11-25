@@ -1,7 +1,7 @@
 part of appwrite.models;
 
 /// Token
-class Token {
+class Token implements Model {
     /// Token ID.
     final String $id;
     /// User ID.
@@ -20,13 +20,14 @@ class Token {
 
     factory Token.fromMap(Map<String, dynamic> map) {
         return Token(
-            $id: map['\$id'],
-            userId: map['userId'],
-            secret: map['secret'],
+            $id: map['\$id'].toString(),
+            userId: map['userId'].toString(),
+            secret: map['secret'].toString(),
             expire: map['expire'],
         );
     }
 
+    @override
     Map<String, dynamic> toMap() {
         return {
             "\$id": $id,

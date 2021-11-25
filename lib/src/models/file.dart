@@ -1,11 +1,13 @@
 part of appwrite.models;
 
 /// File
-class File {
+class File implements Model {
     /// File ID.
     final String $id;
-    /// File permissions.
-    final Permissions $permissions;
+    /// File read permissions.
+    final List $read;
+    /// File write permissions.
+    final List $write;
     /// File name.
     final String name;
     /// File creation date in Unix timestamp.
@@ -19,7 +21,8 @@ class File {
 
     File({
         required this.$id,
-        required this.$permissions,
+        required this.$read,
+        required this.$write,
         required this.name,
         required this.dateCreated,
         required this.signature,
@@ -29,20 +32,23 @@ class File {
 
     factory File.fromMap(Map<String, dynamic> map) {
         return File(
-            $id: map['\$id'],
-            $permissions: Permissions.fromMap(map['\$permissions']),
-            name: map['name'],
+            $id: map['\$id'].toString(),
+            $read: map['\$read'],
+            $write: map['\$write'],
+            name: map['name'].toString(),
             dateCreated: map['dateCreated'],
-            signature: map['signature'],
-            mimeType: map['mimeType'],
+            signature: map['signature'].toString(),
+            mimeType: map['mimeType'].toString(),
             sizeOriginal: map['sizeOriginal'],
         );
     }
 
+    @override
     Map<String, dynamic> toMap() {
         return {
             "\$id": $id,
-            "\$permissions": $permissions.toMap(),
+            "\$read": $read,
+            "\$write": $write,
             "name": name,
             "dateCreated": dateCreated,
             "signature": signature,

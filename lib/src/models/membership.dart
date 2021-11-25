@@ -1,7 +1,7 @@
 part of appwrite.models;
 
 /// Membership
-class Membership {
+class Membership implements Model {
     /// Membership ID.
     final String $id;
     /// User ID.
@@ -35,11 +35,11 @@ class Membership {
 
     factory Membership.fromMap(Map<String, dynamic> map) {
         return Membership(
-            $id: map['\$id'],
-            userId: map['userId'],
-            teamId: map['teamId'],
-            name: map['name'],
-            email: map['email'],
+            $id: map['\$id'].toString(),
+            userId: map['userId'].toString(),
+            teamId: map['teamId'].toString(),
+            name: map['name'].toString(),
+            email: map['email'].toString(),
             invited: map['invited'],
             joined: map['joined'],
             confirm: map['confirm'],
@@ -47,6 +47,7 @@ class Membership {
         );
     }
 
+    @override
     Map<String, dynamic> toMap() {
         return {
             "\$id": $id,

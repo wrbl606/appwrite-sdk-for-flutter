@@ -10,14 +10,15 @@ class Functions extends Service {
      /// return a list of all of the project's executions. [Learn more about
      /// different API modes](/docs/admin).
      ///
-     Future<models.ExecutionList> listExecutions({required String functionId, String? search, int? limit, int? offset, String? orderType}) async {
+     Future<models.ExecutionList> listExecutions({required String functionId, int? limit, int? offset, String? search, String? cursor, String? cursorDirection}) async {
         final String path = '/functions/{functionId}/executions'.replaceAll(RegExp('{functionId}'), functionId);
 
         final Map<String, dynamic> params = {
-            'search': search,
             'limit': limit,
             'offset': offset,
-            'orderType': orderType,
+            'search': search,
+            'cursor': cursor,
+            'cursorDirection': cursorDirection,
         };
 
         final Map<String, String> headers = {

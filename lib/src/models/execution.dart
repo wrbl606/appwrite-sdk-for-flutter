@@ -1,11 +1,11 @@
 part of appwrite.models;
 
 /// Execution
-class Execution {
+class Execution implements Model {
     /// Execution ID.
     final String $id;
-    /// Execution permissions.
-    final Permissions $permissions;
+    /// Execution read permissions.
+    final List $read;
     /// Function ID.
     final String functionId;
     /// The execution creation date in Unix timestamp.
@@ -25,7 +25,7 @@ class Execution {
 
     Execution({
         required this.$id,
-        required this.$permissions,
+        required this.$read,
         required this.functionId,
         required this.dateCreated,
         required this.trigger,
@@ -38,23 +38,24 @@ class Execution {
 
     factory Execution.fromMap(Map<String, dynamic> map) {
         return Execution(
-            $id: map['\$id'],
-            $permissions: Permissions.fromMap(map['\$permissions']),
-            functionId: map['functionId'],
+            $id: map['\$id'].toString(),
+            $read: map['\$read'],
+            functionId: map['functionId'].toString(),
             dateCreated: map['dateCreated'],
-            trigger: map['trigger'],
-            status: map['status'],
+            trigger: map['trigger'].toString(),
+            status: map['status'].toString(),
             exitCode: map['exitCode'],
-            stdout: map['stdout'],
-            stderr: map['stderr'],
+            stdout: map['stdout'].toString(),
+            stderr: map['stderr'].toString(),
             time: map['time'].toDouble(),
         );
     }
 
+    @override
     Map<String, dynamic> toMap() {
         return {
             "\$id": $id,
-            "\$permissions": $permissions.toMap(),
+            "\$read": $read,
             "functionId": functionId,
             "dateCreated": dateCreated,
             "trigger": trigger,

@@ -1,36 +1,42 @@
 part of appwrite.models;
 
 /// Document
-class Document {
+class Document implements Model {
     /// Document ID.
     final String $id;
     /// Collection ID.
     final String $collection;
-    /// Document permissions.
-    final Permissions $permissions;
+    /// Document read permissions.
+    final List $read;
+    /// Document write permissions.
+    final List $write;
     final Map<String, dynamic> data;
 
     Document({
         required this.$id,
         required this.$collection,
-        required this.$permissions,
+        required this.$read,
+        required this.$write,
         required this.data,
     });
 
     factory Document.fromMap(Map<String, dynamic> map) {
         return Document(
-            $id: map['\$id'],
-            $collection: map['\$collection'],
-            $permissions: Permissions.fromMap(map['\$permissions']),
+            $id: map['\$id'].toString(),
+            $collection: map['\$collection'].toString(),
+            $read: map['\$read'],
+            $write: map['\$write'],
             data: map,
         );
     }
 
+    @override
     Map<String, dynamic> toMap() {
         return {
             "\$id": $id,
             "\$collection": $collection,
-            "\$permissions": $permissions.toMap(),
+            "\$read": $read,
+            "\$write": $write,
             "data": data,
         };
     }

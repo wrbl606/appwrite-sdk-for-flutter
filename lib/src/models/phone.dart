@@ -1,7 +1,7 @@
 part of appwrite.models;
 
 /// Phone
-class Phone {
+class Phone implements Model {
     /// Phone code.
     final String code;
     /// Country two-character ISO 3166-1 alpha code.
@@ -17,12 +17,13 @@ class Phone {
 
     factory Phone.fromMap(Map<String, dynamic> map) {
         return Phone(
-            code: map['code'],
-            countryCode: map['countryCode'],
-            countryName: map['countryName'],
+            code: map['code'].toString(),
+            countryCode: map['countryCode'].toString(),
+            countryName: map['countryName'].toString(),
         );
     }
 
+    @override
     Map<String, dynamic> toMap() {
         return {
             "code": code,

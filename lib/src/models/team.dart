@@ -1,7 +1,7 @@
 part of appwrite.models;
 
 /// Team
-class Team {
+class Team implements Model {
     /// Team ID.
     final String $id;
     /// Team name.
@@ -20,13 +20,14 @@ class Team {
 
     factory Team.fromMap(Map<String, dynamic> map) {
         return Team(
-            $id: map['\$id'],
-            name: map['name'],
+            $id: map['\$id'].toString(),
+            name: map['name'].toString(),
             dateCreated: map['dateCreated'],
             sum: map['sum'],
         );
     }
 
+    @override
     Map<String, dynamic> toMap() {
         return {
             "\$id": $id,

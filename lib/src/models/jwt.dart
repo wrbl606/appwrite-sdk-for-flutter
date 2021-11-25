@@ -1,7 +1,7 @@
 part of appwrite.models;
 
 /// JWT
-class Jwt {
+class Jwt implements Model {
     /// JWT encoded string.
     final String jwt;
 
@@ -11,10 +11,11 @@ class Jwt {
 
     factory Jwt.fromMap(Map<String, dynamic> map) {
         return Jwt(
-            jwt: map['jwt'],
+            jwt: map['jwt'].toString(),
         );
     }
 
+    @override
     Map<String, dynamic> toMap() {
         return {
             "jwt": jwt,
