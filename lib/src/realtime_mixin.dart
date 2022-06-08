@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart';
 import 'exception.dart';
@@ -69,7 +70,7 @@ mixin RealtimeMixin {
             _keepaliveTimer = Timer.periodic(
               const Duration(seconds: 15),
               (_) {
-                _websok?.sink.add('');
+                _websok?.sink.add(ByteData(0));
               },
             );
             break;
