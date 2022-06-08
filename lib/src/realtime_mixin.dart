@@ -21,8 +21,10 @@ mixin RealtimeMixin {
   late WebSocketFactory getWebSocket;
   GetFallbackCookie? getFallbackCookie;
   int? get closeCode => _websok?.closeCode;
+  Timer? _keepaliveTimer;
 
   Future<dynamic> _closeConnection() async {
+    _keepaliveTimer?.cancel();
     await _websok?.sink.close(normalClosure);
     _lastUrl = null;
   }
@@ -64,12 +66,18 @@ mixin RealtimeMixin {
                 }));
               }
             }
+            _keepaliveTimer = Timer.periodic(
+              const Duration(seconds: 15),
+              (_) {
+                _websok?.sink.add('');
+              },
+            );
             break;
           case 'event':
             final message = RealtimeMessage.fromMap(data.data);
-            for(var channel in message.channels) {
+            for (var channel in message.channels) {
               if (_channels[channel] != null) {
-                for( var stream in _channels[channel]!) {
+                for (var stream in _channels[channel]!) {
                   stream.sink.add(message);
                 }
               }
@@ -108,7 +116,7 @@ mixin RealtimeMixin {
 
   RealtimeSubscription subscribeTo(List<String> channels) {
     StreamController<RealtimeMessage> controller = StreamController.broadcast();
-    for(var channel in channels) {
+    for (var channel in channels) {
       if (!_channels.containsKey(channel)) {
         _channels[channel] = [];
       }
@@ -119,13 +127,13 @@ mixin RealtimeMixin {
         stream: controller.stream,
         close: () async {
           controller.close();
-          for(var channel in channels) {
+          for (var channel in channels) {
             _channels[channel]!.remove(controller);
             if (_channels[channel]!.isEmpty) {
               _channels.remove(channel);
             }
           }
-          if(_channels.isNotEmpty) {
+          if (_channels.isNotEmpty) {
             await Future.delayed(Duration.zero, () => _createSocket());
           } else {
             await _closeConnection();
